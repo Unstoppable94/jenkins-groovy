@@ -6,8 +6,12 @@ set -x
 #make  sure output in shell's directory , than other shells can work correctly
 BASEDIR=$(dirname "$0")
 #echo "$BASEDIR"
+
+export PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin
+
 cd "$BASEDIR"
 
+date >>backend.log 
 directory= ""
 
 if [[ -z "${JenkinsJobDir}" ]]; then
