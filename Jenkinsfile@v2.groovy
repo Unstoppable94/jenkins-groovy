@@ -227,7 +227,7 @@
                 }
                 catch (exc) {
                 }
-                    sh "rancher run '${DeployToRancher_arg}' --name '${DeployToRancher_service}' '${imagename}' '${DeployToRancher_cmd}' "
+                    sh "rancher run ${DeployToRancher_arg} --name '${DeployToRancher_service}' '${imagename}' ${DeployToRancher_cmd} "
 
                 }
                 
