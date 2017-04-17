@@ -1,9 +1,7 @@
 #!groovy
 
 //timeout(time: 60, unit: 'SECONDS') {
-
-
-    node {
+node {
 
 
         def mvnHome = tool "${mavenId}"
@@ -118,7 +116,7 @@
             }
         }
 
- if (env.Artifact_skip == "false") {
+        if (env.Artifact_skip == "false") {
             //todo -Dfindbugs.includeFilterFile=./findbugsfilter.xml
 
             try {
@@ -234,6 +232,7 @@
             }
 
         }
+        
         currentBuild.result = 'SUCCESS'
 
     }
