@@ -205,14 +205,14 @@
 //'${imagename}'
                     sh "docker push   '${imagename}' "
                     sh " echo '${imagename}' >dockerbuildresult.txt"
-                    dirname="tempdir"+	System.currentTimeMillis()		
+                    dirname="dockerbuildtempdir"+	System.currentTimeMillis()		
                     sh "mkdir '${dirname}' "
                     filename = java.net.URLEncoder.encode("image--"+imagename, "UTF-8")+".zip"
                     
                     archiveArtifacts filename
 
-                    zip archive: true, dir: '${dirname}', glob: '', zipFile: filename
-
+                    zip archive: true, dir:  dirname , glob: '', zipFile: filename
+                    //sh "rm -rf  '${dirname}' "
                 }
 
             }
