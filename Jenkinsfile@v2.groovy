@@ -189,9 +189,11 @@
        
 //Docker 系列操作
         if (env.CreateImage_skip == "false") {
+            var imagename=env.CreateImage_registry+'/'+env.CreateImage_tag+"-"+env.BUILD_TAG 
+            echo imagename
             stage("创建镜像") {
 
-                sh "docker build -t '{$CreateImage_registry}'/'{$CreateImage_tag}'-{env.BUILD_TAG}  ."
+                sh "docker build -t ${imagename} ."
 
 
             }
@@ -201,7 +203,7 @@
                 stage("Push镜像") {
 
 
-                    sh "docker push  '{$CreateImage_registry}'/'{$CreateImage_tag}'-{env.BUILD_TAG} "
+                    sh "docker push  '${imagename}' "
 
                 }
 
