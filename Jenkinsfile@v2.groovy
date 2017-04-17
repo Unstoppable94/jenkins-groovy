@@ -206,7 +206,10 @@
                     sh "docker push   '${imagename}' "
                     sh " echo '${imagename}' >dockerbuildresult.txt"
                     filename = java.net.URLEncoder.encode("image--"+imagename, "UTF-8")+".zip"
-                    zip archive: true, dir: './dockerbuildresult.txt', glob: '', zipFile: filename
+                    
+                    archiveArtifacts filename
+
+                   // zip archive: true, dir: './dockerbuildresult.txt', glob: '', zipFile: filename
 
                 }
 
