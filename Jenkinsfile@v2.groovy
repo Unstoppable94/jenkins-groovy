@@ -234,5 +234,6 @@
             }
 
         }
+        currentBuild.result = 'SUCCESS'
 
     }
