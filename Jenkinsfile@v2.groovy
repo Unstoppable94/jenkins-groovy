@@ -206,7 +206,7 @@
                     sh "docker push   '${imagename}' "
                     sh " echo '${imagename}' >dockerbuildresult.txt"
                     dirname="tempdir"+	System.currentTimeMillis()		
-                    sh "mdkir '${dirname}' "
+                    sh "mkdir '${dirname}' "
                     filename = java.net.URLEncoder.encode("image--"+imagename, "UTF-8")+".zip"
                     
                     archiveArtifacts filename
