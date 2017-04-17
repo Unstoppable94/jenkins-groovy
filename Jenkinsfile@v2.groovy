@@ -202,8 +202,8 @@
 
                 stage("Push镜像") {
 
-
-                    sh "docker push  '${imagename}' "
+//'${imagename}'
+                    sh "docker push  10.0.2.50/cicd/ciexample:jenkins-PROproject222-10 "
 
                 }
 
