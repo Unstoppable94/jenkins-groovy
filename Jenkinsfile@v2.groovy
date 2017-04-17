@@ -209,7 +209,7 @@
 
             }
         //test data
-        imagename="10.0.2.50/library/busybox"
+        //imagename="10.0.2.50/library/busybox"
             if (env.DeployToRancher_skip == "false") {
 
                 stage("部署应用") {
