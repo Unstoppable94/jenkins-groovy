@@ -203,7 +203,10 @@
                 stage("Push镜像") {
 
 //'${imagename}'
-                    sh "docker push  10.0.2.50/cicd/ciexample:jenkins-PROproject222-10 "
+                    sh "docker push   '${imagename}' "
+                    sh " echo '${imagename}' >dockerbuildresult.txt"
+                    filename = java.net.URLEncoder.encode("image--"+imagename, "UTF-8")+".zip"
+                    zip archive: true, dir: './dockerbuildresult.txt', glob: '', zipFile: filename
 
                 }
 
@@ -219,6 +222,7 @@
                     sh "rancher run '{$DeployToRancher_arg}' --name '{$DeployToRancher_service}' '${imagename}' '{$DeployToRancher_cmd}' "
 
                 }
+                
             }
 
         }
