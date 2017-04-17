@@ -118,6 +118,29 @@
             }
         }
 
+ if (env.Artifact_skip == "false") {
+            //todo -Dfindbugs.includeFilterFile=./findbugsfilter.xml
+
+            try {
+                stage("打包结果") {
+                    filename = env.BUILD_TAG + ".zip"
+                    //echo filename
+
+                    zip archive: true, dir: 'target', glob: '', zipFile: filename
+                }
+            }
+            catch (exc) {
+                if (env.Artifact_continueOnfail == "false") {
+                    sh "exit 1"
+                    return
+                } else {
+                    status result: "FAILURE"
+                }
+                //TODO
+            }
+
+
+        }
         if (env.Sonar_skip == "false") {
             //todo -Dfindbugs.includeFilterFile=./findbugsfilter.xml
             //设定 jdk version
@@ -163,29 +186,7 @@
 
         }
 
-        if (env.Artifact_skip == "false") {
-            //todo -Dfindbugs.includeFilterFile=./findbugsfilter.xml
-
-            try {
-                stage("打包结果") {
-                    filename = env.BUILD_TAG + ".zip"
-                    //echo filename
-
-                    zip archive: true, dir: 'target', glob: '', zipFile: filename
-                }
-            }
-            catch (exc) {
-                if (env.Artifact_continueOnfail == "false") {
-                    sh "exit 1"
-                    return
-                } else {
-                    status result: "FAILURE"
-                }
-                //TODO
-            }
-
-
-        }
+       
 //Docker 系列操作
         if (env.CreateImage_skip == "false") {
             stage("创建镜像") {
