@@ -221,9 +221,12 @@
             if (env.DeployToRancher_skip == "false") {
 
                 stage("部署应用") {
-
+                try{
 // 已经存在的服务需要先down--todo
-                    sh "rancher rm  '{$DeployToRancher_service}'"
+                    sh "rancher rm  '${DeployToRancher_service}' "
+                }
+                catch (exc) {
+                }
                     sh "rancher run '{$DeployToRancher_arg}' --name '{$DeployToRancher_service}' '${imagename}' '{$DeployToRancher_cmd}' "
 
                 }
