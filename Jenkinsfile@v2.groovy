@@ -208,14 +208,15 @@
                 }
 
             }
-
+        //test data
+        imagename="10.0.2.50/library/busybox"
             if (env.DeployToRancher_skip == "false") {
 
                 stage("部署应用") {
 
 // 已经存在的服务需要先down--todo
                     sh "rancher rm  '{$DeployToRancher_service}'"
-                    sh "rancher run '{$DeployToRancher_arg}' --name '{$DeployToRancher_service}' '{$CreateImage_registry}'/'{$CreateImage_tag}'-{env.BUILD_TAG} '{$DeployToRancher_cmd}' "
+                    sh "rancher run '{$DeployToRancher_arg}' --name '{$DeployToRancher_service}' '${imagename}' '{$DeployToRancher_cmd}' "
 
                 }
             }
