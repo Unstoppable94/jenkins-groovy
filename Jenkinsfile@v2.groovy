@@ -189,7 +189,7 @@
        
 //Docker 系列操作
         if (env.CreateImage_skip == "false") {
-            def imagename=env.CreateImage_registry+'/'+env.CreateImage_tag+"-"+env.BUILD_TAG 
+            def imagename=env.CreateImage_registry+'/'+env.CreateImage_tag+":"+env.BUILD_TAG 
             echo imagename
             stage("创建镜像") {
 
