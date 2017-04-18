@@ -1,6 +1,4 @@
 #!groovy
-
-
 int excuteTime = 30
 try{
     excuteTime=env.maxExcutiontime .toInteger()}
