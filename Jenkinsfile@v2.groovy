@@ -14,7 +14,7 @@ timeout(excuteTime){
 node {
         def mvnHome = tool "${mavenId}"
         env.JAVA_HOME = tool "${jdk}"
-        stage('ä»£ç ä¸‹è½½') {
+        stage('´úÂëÏÂÔØ') {
             try {
                 creid = "${SCMcredential}"
                 //  echo  'CREDENTIALS'
@@ -37,7 +37,7 @@ node {
             }
 //+env.SCMBranch
         }
-        stage('ç¼–è¯‘') {
+        stage('±àÒë') {
             CMD = "'${mvnHome}/bin/mvn' " + env.Compile_goal
             //-Dmaven.test.failure.ignore clean package"
             // CMD="'${mvnHome}/bin/mvn' -X " +env.Compile_goal
@@ -72,7 +72,7 @@ node {
         if (env.MavenTest_skip == "false") {
             //todo -Dfindbugs.includeFilterFile=./findbugsfilter.xml
             try {
-                stage("Maven æµ‹è¯•") {
+                stage("Maven ²âÊÔ") {
                     CMD = "'${mvnHome}/bin/mvn' " + env.MavenTest_goal
                     sh CMD
                 }
@@ -89,7 +89,7 @@ node {
         }
         if (env.OSWAPDepend_skip == "false") {
             //todo -Dfindbugs.includeFilterFile=./findbugsfilter.xml
-            stage("ä¾èµ–åŒ…OSWAPæ£€æŸ¥") {
+            stage("ÒÀÀµ°üOSWAP¼ì²é") {
                 try {
                     sh "'${mvnHome}/bin/mvn'  org.owasp:dependency-check-maven:1.4.5:check -Ddependency-check-format=XML -DreportOutputDirectory=./target"
                 }
@@ -101,7 +101,7 @@ node {
         if (env.Artifact_skip == "false") {
             //todo -Dfindbugs.includeFilterFile=./findbugsfilter.xml
             try {
-                stage("æ‰“åŒ…ç»“æœ") {
+                stage("´ò°ü½á¹û") {
                     filename = env.BUILD_TAG + ".zip"
                     //echo filename
                     zip archive: true, dir: 'target', glob: '', zipFile: filename
@@ -119,15 +119,15 @@ node {
         }
         if (env.Sonar_skip == "false") {
             //todo -Dfindbugs.includeFilterFile=./findbugsfilter.xml
-            //è®¾å®š jdk version
-            //toDO è·å–sonar ä¿¡æ¯
+            //Éè¶¨ jdk version
+            //toDO »ñÈ¡sonar ĞÅÏ¢
             try {
                 // withCredentials([usernameColonPassword(credentialsId: 'svn-winhong', variable: '')]) {
                 // some block
                 //    sh 'echo uname=$USERNAME pwd=$PASSWORD'
                 //}
                 //node('<MY_SLAVE>') {
-                stage("è¿›è¡ŒSonaræ£€æŸ¥") {
+                stage("½øĞĞSonar¼ì²é") {
                     withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId: env.SonarCredential,
                                       usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
                         echo "credentialsId"
@@ -150,15 +150,15 @@ node {
             }
         }
        
-//Docker ç³»åˆ—æ“ä½œ
+//Docker ÏµÁĞ²Ù×÷
         if (env.CreateImage_skip == "false") {
             def imagename=env.CreateImage_registry+'/'+env.CreateImage_tag+":"+env.BUILD_TAG 
             echo imagename
-            stage("åˆ›å»ºé•œåƒ") {
+            stage("´´½¨¾µÏñ") {
                 sh "docker build -t ${imagename} ."
             }
             if (env.PushImage_skip == "false") {
-                stage("Pushé•œåƒ") {
+                stage("Push¾µÏñ") {
 //'${imagename}'
                     sh "docker push   '${imagename}' "
                     sh " echo '${imagename}' >dockerbuildresult.txt"
@@ -166,7 +166,6 @@ node {
                     sh "mkdir '${dirname}' "
                     filename = java.net.URLEncoder.encode("image--"+imagename, "UTF-8")+".zip"
                     
-                    archiveArtifacts filename
                     zip archive: true, dir:  dirname , glob: '', zipFile: filename
                     //sh "rm -rf  '${dirname}' "
                 }
@@ -174,9 +173,9 @@ node {
         //test data
         //imagename="10.0.2.50/library/busybox"
             if (env.DeployToRancher_skip == "false") {
-                stage("éƒ¨ç½²åº”ç”¨") {
+                stage("²¿ÊğÓ¦ÓÃ") {
                 try{
-// å·²ç»å­˜åœ¨çš„æœåŠ¡éœ€è¦å…ˆdown--todo
+// ÒÑ¾­´æÔÚµÄ·şÎñĞèÒªÏÈdown--todo
                     sh "rancher rm  '${DeployToRancher_service}' "
                 }
                 catch (exc) {
