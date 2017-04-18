@@ -165,7 +165,6 @@ node {
                     sh "mkdir '${dirname}' "
                     filename = java.net.URLEncoder.encode("image--"+imagename, "UTF-8")+".zip"
                     
-                    archiveArtifacts filename
                     zip archive: true, dir:  dirname , glob: '', zipFile: filename
                     //sh "rm -rf  '${dirname}' "
                 }
