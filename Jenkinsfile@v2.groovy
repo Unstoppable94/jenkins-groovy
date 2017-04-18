@@ -1,9 +1,19 @@
 #!groovy
+
+int excuteTime = 30
+try{
+    excuteTime=env.maxExcutiontime .toInteger()}
+catch(exc){
+    excuteTime= 30
+}
+echo "excuteTime="+excuteTime
+
+timeout(excuteTime){
 //timeout(time: 60, unit: 'SECONDS') {
 node {
         def mvnHome = tool "${mavenId}"
         env.JAVA_HOME = tool "${jdk}"
-        stage('´úÂëÏÂÔØ') {
+        stage('ä»£ç ä¸‹è½½') {
             try {
                 creid = "${SCMcredential}"
                 //  echo  'CREDENTIALS'
@@ -26,7 +36,7 @@ node {
             }
 //+env.SCMBranch
         }
-        stage('±àÒë') {
+        stage('ç¼–è¯‘') {
             CMD = "'${mvnHome}/bin/mvn' " + env.Compile_goal
             //-Dmaven.test.failure.ignore clean package"
             // CMD="'${mvnHome}/bin/mvn' -X " +env.Compile_goal
@@ -61,7 +71,7 @@ node {
         if (env.MavenTest_skip == "false") {
             //todo -Dfindbugs.includeFilterFile=./findbugsfilter.xml
             try {
-                stage("Maven ²âÊÔ") {
+                stage("Maven æµ‹è¯•") {
                     CMD = "'${mvnHome}/bin/mvn' " + env.MavenTest_goal
                     sh CMD
                 }
@@ -78,7 +88,7 @@ node {
         }
         if (env.OSWAPDepend_skip == "false") {
             //todo -Dfindbugs.includeFilterFile=./findbugsfilter.xml
-            stage("ÒÀÀµ°üOSWAP¼ì²é") {
+            stage("ä¾èµ–åŒ…OSWAPæ£€æŸ¥") {
                 try {
                     sh "'${mvnHome}/bin/mvn'  org.owasp:dependency-check-maven:1.4.5:check -Ddependency-check-format=XML -DreportOutputDirectory=./target"
                 }
@@ -90,7 +100,7 @@ node {
         if (env.Artifact_skip == "false") {
             //todo -Dfindbugs.includeFilterFile=./findbugsfilter.xml
             try {
-                stage("´ò°ü½á¹û") {
+                stage("æ‰“åŒ…ç»“æœ") {
                     filename = env.BUILD_TAG + ".zip"
                     //echo filename
                     zip archive: true, dir: 'target', glob: '', zipFile: filename
@@ -108,15 +118,15 @@ node {
         }
         if (env.Sonar_skip == "false") {
             //todo -Dfindbugs.includeFilterFile=./findbugsfilter.xml
-            //Éè¶¨ jdk version
-            //toDO »ñÈ¡sonar ĞÅÏ¢
+            //è®¾å®š jdk version
+            //toDO è·å–sonar ä¿¡æ¯
             try {
                 // withCredentials([usernameColonPassword(credentialsId: 'svn-winhong', variable: '')]) {
                 // some block
                 //    sh 'echo uname=$USERNAME pwd=$PASSWORD'
                 //}
                 //node('<MY_SLAVE>') {
-                stage("½øĞĞSonar¼ì²é") {
+                stage("è¿›è¡ŒSonaræ£€æŸ¥") {
                     withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId: env.SonarCredential,
                                       usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
                         echo "credentialsId"
@@ -139,15 +149,15 @@ node {
             }
         }
        
-//Docker ÏµÁĞ²Ù×÷
+//Docker ç³»åˆ—æ“ä½œ
         if (env.CreateImage_skip == "false") {
             def imagename=env.CreateImage_registry+'/'+env.CreateImage_tag+":"+env.BUILD_TAG 
             echo imagename
-            stage("´´½¨¾µÏñ") {
+            stage("åˆ›å»ºé•œåƒ") {
                 sh "docker build -t ${imagename} ."
             }
             if (env.PushImage_skip == "false") {
-                stage("Push¾µÏñ") {
+                stage("Pushé•œåƒ") {
 //'${imagename}'
                     sh "docker push   '${imagename}' "
                     sh " echo '${imagename}' >dockerbuildresult.txt"
@@ -163,9 +173,9 @@ node {
         //test data
         //imagename="10.0.2.50/library/busybox"
             if (env.DeployToRancher_skip == "false") {
-                stage("²¿ÊğÓ¦ÓÃ") {
+                stage("éƒ¨ç½²åº”ç”¨") {
                 try{
-// ÒÑ¾­´æÔÚµÄ·şÎñĞèÒªÏÈdown--todo
+// å·²ç»å­˜åœ¨çš„æœåŠ¡éœ€è¦å…ˆdown--todo
                     sh "rancher rm  '${DeployToRancher_service}' "
                 }
                 catch (exc) {
@@ -176,6 +186,6 @@ node {
             }
         }
         
-        currentBuild.result = 'SUCCESS'
+ //       currentBuild.result = 'SUCCESS'
     }
-
+}
