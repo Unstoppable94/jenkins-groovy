@@ -1,12 +1,6 @@
 #!groovy
 
-//timeout(time: 60, unit: 'SECONDS') {
 
-#!groovy
-
-
-
-//timeout(time: 60, unit: 'SECONDS') {
 
 def extMain()  {
 int excuteTime = 30
