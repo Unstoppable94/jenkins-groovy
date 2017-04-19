@@ -2,15 +2,21 @@
 
 //timeout(time: 60, unit: 'SECONDS') {
 
-extMain()  {
-    int excuteTime = 30
-    try{
-        excuteTime=env.maxExcutiontime .toInteger()}
-    catch(exc){
-        excuteTime= 30
-    }
-    echo "excuteTime="+excuteTime
-    timeout(excuteTime){
+#!groovy
+
+
+
+//timeout(time: 60, unit: 'SECONDS') {
+
+def extMain()  {
+int excuteTime = 30
+try{
+    excuteTime=env.maxExcutiontime .toInteger()}
+catch(exc){
+    excuteTime= 30
+}
+echo "excuteTime="+excuteTime
+timeout(excuteTime){
 
         def mvnHome = tool "${mavenId}"
         env.JAVA_HOME = tool "${jdk}"
@@ -189,3 +195,5 @@ extMain()  {
  //       currentBuild.result = 'SUCCESS'
     }
 }
+
+return this
