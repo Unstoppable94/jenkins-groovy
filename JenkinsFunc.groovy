@@ -156,17 +156,20 @@ timeout(excuteTime){
             echo imagename
             stage("创建镜像") {
                 sh "docker build -t ${imagename} ."
-            }
-            if (env.PushImage_skip == "false") {
-                stage("Push镜像") {
-//'${imagename}'
-                    sh "docker push   '${imagename}' "
-                    sh " echo '${imagename}' >dockerbuildresult.txt"
+                
+                 sh " echo '${imagename}' >dockerbuildresult.txt"
                     dirname="dockerbuildtempdir"+	System.currentTimeMillis()		
                     sh "mkdir '${dirname}' "
                     filename = java.net.URLEncoder.encode("image--"+imagename, "UTF-8")+".zip"
                     
                     zip archive: true, dir:  dirname , glob: '', zipFile: filename
+                    
+            }
+            if (env.PushImage_skip == "false") {
+                stage("Push镜像") {
+//'${imagename}'
+                    sh "docker push   '${imagename}' "
+                   
                     //sh "rm -rf  '${dirname}' "
                 }
             }
