@@ -41,11 +41,11 @@ result=$(mktemp ./tmp/jenkins-stat.XXXXXX)
 
 
 #cat $timeresult |awk 'NR>0{arr[$4]++}END{print "[";for (a in arr) print "{statu: \""a"\",\"value\": \""arr[a]"\"},";print "]"}' >$result
-cat $timeresult |awk 'NR>0{ arr[$3]++ } END { print "[";for (i = $; i >= 0; --i)  print "{statu=\""$4"\",\"value\"=\""arr[$4]"\"},";print "]"}'' >$result
+cat $timeresult |awk 'NR>0{ arr[$3]++ } END { for (a in arr) print a" "arr[a]" " }' >$result
 
 #cat temp112 |awk 'NR>0{arr[$4]++}END{print "[";for (i = $4-1; i >= 0; --i)  print "{statu=\""$4"\",\"value\"=\""arr[$4]"\"},";print "]"}' >$result
 
-cat $result|awk 'print {}
+cat $result
 exit 8   
   
   
