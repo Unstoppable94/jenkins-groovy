@@ -3,6 +3,14 @@ set -x
 #todo if same shell is running ,exist
 
 
+count=`ps -ef|grep backend.sh |wc|awk '{print $1}'`
+echo $count
+
+if [ "$count" != "3" ]; then
+ echo "a shell run"
+ exit
+fi
+
 #make  sure output in shell's directory , than other shells can work correctly
 BASEDIR=$(dirname "$0")
 #echo "$BASEDIR"
@@ -21,6 +29,7 @@ else
 fi
 echo $directory
 export LANG=C
+echo $LANG
 #make sure allbuilds exist
 touch allbuilds
 
@@ -31,7 +40,9 @@ sort temp -o temp
 
 #append new builds to file allbuilds
 comm -23 temp allbuilds >tttt
-cat tttt|awk  'BEGIN {p1="www"} { if (p1!=$1) {print $1" "$2 ;p1=$1 } }' >tttt2
+cat allbuilds >>tttt
+sort tttt -o tttt
+cat tttt|awk  'BEGIN {p1="www"} { if (p1!=$1) {print $1"\t"$2 ;p1=$1 } }' >tttt2
 sort tttt2 -o allbuilds
 
 #make sure allresults exist
