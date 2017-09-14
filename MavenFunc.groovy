@@ -1,6 +1,7 @@
 #!groovy
 
 
+def extMain()  {
 int excuteTime = 30
 try{
     excuteTime=env.maxExcutiontime .toInteger()}
@@ -8,13 +9,11 @@ catch(exc){
     excuteTime= 30
 }
 echo "excuteTime="+excuteTime
-
 timeout(excuteTime){
-//timeout(time: 60, unit: 'SECONDS') {
-node {
+
         def mvnHome = tool "${mavenId}"
         env.JAVA_HOME = tool "${jdk}"
-        stage('��������') {
+        stage('代码下载') {
             try {
                 creid = "${SCMcredential}"
                 //  echo  'CREDENTIALS'
@@ -37,7 +36,7 @@ node {
             }
 //+env.SCMBranch
         }
-        stage('����') {
+        stage('编译') {
             CMD = "'${mvnHome}/bin/mvn' " + env.Compile_goal
             //-Dmaven.test.failure.ignore clean package"
             // CMD="'${mvnHome}/bin/mvn' -X " +env.Compile_goal
@@ -72,7 +71,7 @@ node {
         if (env.MavenTest_skip == "false") {
             //todo -Dfindbugs.includeFilterFile=./findbugsfilter.xml
             try {
-                stage("Maven ����") {
+                stage("Maven 测试") {
                     CMD = "'${mvnHome}/bin/mvn' " + env.MavenTest_goal
                     sh CMD
                 }
@@ -89,7 +88,7 @@ node {
         }
         if (env.OSWAPDepend_skip == "false") {
             //todo -Dfindbugs.includeFilterFile=./findbugsfilter.xml
-            stage("������OSWAP���") {
+            stage("依赖包OSWAP检查") {
                 try {
                     sh "'${mvnHome}/bin/mvn'  org.owasp:dependency-check-maven:1.4.5:check -Ddependency-check-format=XML -DreportOutputDirectory=./target"
                 }
@@ -101,7 +100,7 @@ node {
         if (env.Artifact_skip == "false") {
             //todo -Dfindbugs.includeFilterFile=./findbugsfilter.xml
             try {
-                stage("������") {
+                stage("打包结果") {
                     filename = env.BUILD_TAG + ".zip"
                     //echo filename
                     zip archive: true, dir: 'target', glob: '', zipFile: filename
@@ -119,15 +118,15 @@ node {
         }
         if (env.Sonar_skip == "false") {
             //todo -Dfindbugs.includeFilterFile=./findbugsfilter.xml
-            //�趨 jdk version
-            //toDO ��ȡsonar ��Ϣ
+            //设定 jdk version
+            //toDO 获取sonar 信息
             try {
                 // withCredentials([usernameColonPassword(credentialsId: 'svn-winhong', variable: '')]) {
                 // some block
                 //    sh 'echo uname=$USERNAME pwd=$PASSWORD'
                 //}
                 //node('<MY_SLAVE>') {
-                stage("����Sonar���") {
+                stage("进行Sonar检查") {
                     withCredentials([[$class          : 'UsernamePasswordMultiBinding', credentialsId: env.SonarCredential,
                                       usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
                         echo "credentialsId"
@@ -150,38 +149,45 @@ node {
             }
         }
        
-//Docker ϵ�в���
+//Docker 系列操作
         if (env.CreateImage_skip == "false") {
             def imagename=env.CreateImage_registry+'/'+env.CreateImage_tag+":"+env.BUILD_TAG 
             echo imagename
-            stage("��������") {
+            stage("创建镜像") {
                 sh "docker build -t ${imagename} ."
-            }
-            if (env.PushImage_skip == "false") {
-                stage("Push����") {
-//'${imagename}'
-                    sh "docker push   '${imagename}' "
-                    sh " echo '${imagename}' >dockerbuildresult.txt"
+                
+                 sh " echo '${imagename}' >dockerbuildresult.txt"
                     dirname="dockerbuildtempdir"+	System.currentTimeMillis()		
                     sh "mkdir '${dirname}' "
                     filename = java.net.URLEncoder.encode("image--"+imagename, "UTF-8")+".zip"
                     
                     zip archive: true, dir:  dirname , glob: '', zipFile: filename
+                    
+            }
+            if (env.PushImage_skip == "false") {
+                stage("Push镜像") {
+//'${imagename}'
+                    sh "docker push   '${imagename}' "
+                   
                     //sh "rm -rf  '${dirname}' "
                 }
             }
         //test data
         //imagename="10.0.2.50/library/busybox"
             if (env.DeployToRancher_skip == "false") {
-                stage("����Ӧ��") {
-                try{
-// �Ѿ����ڵķ�����Ҫ��down--todo
-                    sh "rancher rm  '${DeployToRancher_service}' "
+            
+
+                    stage("部署应用") {
+                    //sh "/usr/bin/rancher.sh ${DeployToRancher_arg}  '${DeployToRancher_service}' '${imagename}' ${DeployToRancher_cmd} "
+                                    sh " export DeployToRancher_arg=${DeployToRancher_arg}; \
+                                    export DeployToRancher_cmd=${DeployToRancher_cmd}; \
+                                    export DeployToRancher_service=${DeployToRancher_service}; \
+                                    export imagename=${imagename}; \
+                                    export DeployToRancher_environment=${DeployToRancher_environment}; \
+                                    /usr/bin/rancher.sh "
                 }
-                catch (exc) {
-                }
-                    sh "rancher run ${DeployToRancher_arg} --name '${DeployToRancher_service}' '${imagename}' ${DeployToRancher_cmd} "
-                }
+
+               
                 
             }
         }
@@ -189,3 +195,5 @@ node {
  //       currentBuild.result = 'SUCCESS'
     }
 }
+
+return this
