@@ -1,12 +1,14 @@
 #!groovy
 
- 
+ def extMain()  {
 int excuteTime = 30
 try{
     excuteTime=env.maxExcutiontime .toInteger()}
 catch(exc){
     excuteTime= 30
 }
+
+
 echo "excuteTime="+excuteTime
 timeout(excuteTime){
 
@@ -99,9 +101,7 @@ timeout(excuteTime){
                 
             }
         }
-        
- //       currentBuild.result = 'SUCCESS'
-    }
+ 
 }
 
 return this
