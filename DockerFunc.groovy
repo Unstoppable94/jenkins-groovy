@@ -57,9 +57,9 @@ timeout(excuteTime){
                     para+=" -v "+env.dockercompile_distDirMap
                 }
 
-                echo "docker run --rm -it ${para}  ${imagename} '${Dockercompile_dockercmd}'"
+                echo "docker run --rm  ${para}  ${imagename} '${Dockercompile_dockercmd}'"
 
-                sh "docker run --rm -it ${para}  ${imagename} '${Dockercompile_dockercmd}'"
+                sh "docker run --rm ${para}  ${imagename} ${Dockercompile_dockercmd} "
             }
         }
          
