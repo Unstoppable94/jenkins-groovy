@@ -63,11 +63,11 @@ timeout(excuteTime){
          
         //def imagename=env.CreateImage_registry+'/'+env.CreateImage_tag+":"+env.BUILD_TAG 
         //    echo imagename
-        def imagename=env.Dockerbuild_registry+'/'+env.Dockerbuild_tag+":"+env.BUILD_TAG 
+        def imagename=env.CreateImage_registry+'/'+env.CreateImage_tag+":"+env.BUILD_TAG 
 
         stage("创建镜像") {
 
-                sh "docker build -t ${imagename} . -f ${Dockerbuild_dockerfile}"
+                sh "docker build -t ${imagename} . -f ${CreateImage_dockerfile}"
                 
                  sh " echo '${imagename}' >dockerbuildresult.txt"
                     dirname="dockerbuildtempdir"+	System.currentTimeMillis()		
