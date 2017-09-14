@@ -179,9 +179,9 @@ timeout(excuteTime){
 
                     stage("部署应用") {
                     //sh "/usr/bin/rancher.sh ${DeployToRancher_arg}  '${DeployToRancher_service}' '${imagename}' ${DeployToRancher_cmd} "
-                                    sh " export DeployToRancher_arg=${DeployToRancher_arg}; \
-                                    export DeployToRancher_cmd=${DeployToRancher_cmd}; \
-                                    export DeployToRancher_service=${DeployToRancher_service}; \
+                                    sh " export DeployToRancher_arg='${DeployToRancher_arg}'; \
+                                    export DeployToRancher_cmd='${DeployToRancher_cmd}'; \
+                                    export DeployToRancher_service='${DeployToRancher_service}'; \
                                     export imagename=${imagename}; \
                                     export DeployToRancher_environment=${DeployToRancher_environment}; \
                                     /usr/bin/rancher.sh "
