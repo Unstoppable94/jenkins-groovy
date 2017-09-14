@@ -43,22 +43,22 @@ timeout(excuteTime){
             stage("Docker编译") {
                 def para=""
                 if (env.Dockercompile_dockerworkdir!=""){
-                    para+="--workdir  "+env.Dockercompile_dockerworkdir
+                    para+=" --workdir  "+env.Dockercompile_dockerworkdir
                 }
 
                 if (env.Dockercompile_srcMap!=""){
-                    para+="-v  `pwd`:"+env.Dockercompile_srcMap
+                    para+=" -v  `pwd`:"+env.Dockercompile_srcMap
                 }
                 
                 if (env.Dockercompile_dockeruser!=""){
-                    para+="-u "+env.Dockercompile_dockeruser
+                    para+=" -u "+env.Dockercompile_dockeruser
                 }
                 if (env.dockercompile_distDirMap!=""){
-                    para+="-v "+env.dockercompile_distDirMap
+                    para+=" -v "+env.dockercompile_distDirMap
                 }
 
                 
-                sh "docker run --rm -it ${para} ${imagename} ${dockercompile_dockercmd}"
+                sh "docker run --rm -it ${para}  ${imagename} ${Dockercompile_dockercmd}"
             }
         }
          
