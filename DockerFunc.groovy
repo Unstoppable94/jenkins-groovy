@@ -98,8 +98,10 @@ timeout(excuteTime){
                
                 
             }
+        }
         
- 
+ //       currentBuild.result = 'SUCCESS'
+    }
 }
 
 return this
