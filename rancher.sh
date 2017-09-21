@@ -83,7 +83,7 @@ fi
 
 CATTLE_SECRET_KEY=`cat ~/.rancher/cli.json |jq .secretKey|sed 's/"//g' ` 
 CATTLE_ACCESS_KEY=`cat ~/.rancher/cli.json |jq .accessKey|sed 's/"//g' ` 
-CATTLE_URL=`cat ~/.rancher/cli.json |jq .url|awk -F "//" '{print "http://"$2"/v2-beta"}' `  
+CATTLE_URL=`cat ~/.rancher/cli.json |jq .url|awk -F "/" '{print "http://"$3"/v2-beta"}' `  
 #${DeployToRancher_arg}  '${DeployToRancher_service}' '${imagename}' ${DeployToRancher_cmd} 
 #export DeployToRancher_service=$2
 #export imagename=$3
