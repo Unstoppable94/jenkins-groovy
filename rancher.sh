@@ -69,7 +69,8 @@ function finish_upgrade() {
               sleep 3
               continue ;;
           *)
-              die "unexpected upgrade state: $serviceState" ;;
+            echo "unexpected upgrade state: $serviceState" ;exit 1;
+              
       esac
     done
 }
@@ -96,5 +97,7 @@ then
    sleep 3
    finish_upgrade  ${RANCHER_ENV}  ${serviceId}
 else  
-    rancher --env ${RANCHER_ENV} run ${DeployToRancher_arg} --name ${DeployToRancher_service} ${imagename} ${DeployToRancher_cmd}
+
+    rancher --env ${RANCHER_ENV} run ${DeployToRancher_arg} --name ${DeployToRancher_service} \
+      ${imagename} ${DeployToRancher_cmd}
 fi        
