@@ -49,9 +49,16 @@ timeout(excuteTime){
         if (env.Findbugs_skip == "false") {
             //todo -Dfindbugs.includeFilterFile=./findbugsfilter.xml
             try {
-                stage(
-                        "Findbugs") {
-                    sh "'${mvnHome}/bin/mvn'  org.codehaus.mojo:findbugs-maven-plugin:3.0.4:check  -Dfindbugs.xmlOutput=true "
+                
+                stage("Findbugs") {
+                 	  findbugarg = ''
+                 
+            		if (env.Findbugs_inFilterUrl!='')
+            			 findbugarg = " -Dfindbugs.includeFilterFile="+env.Findbugs_inFilterUrl
+            		if (env.Findbugs_excludeFilterUrl!='')
+            			 findbugarg = findbugarg+ " -Dfindbugs.excludeFilterFile="+env.Findbugs_excludeFilterUrl
+            			 
+            	    sh "'${mvnHome}/bin/mvn'  org.codehaus.mojo:findbugs-maven-plugin:3.0.4:check ${findbugarg} -Dfindbugs.xmlOutput=true "
                 }
                 //if(env.Findbugs_continueOnfail=="true")
                 //    sh "'${mvnHome}/bin/mvn'  org.codehaus.mojo:findbugs-maven-plugin:3.0.4:findbugs  -Dfindbugs.xmlOutput=true "
@@ -59,7 +66,7 @@ timeout(excuteTime){
             } catch (exec) {
                 if (env.Findbugs_continueOnfail == "true") {
                     
-                    echo "set stage staatus"
+                    echo "set stage status"
                     status result: "FAILURE"
                 } else {
                     echo "exit "
@@ -120,6 +127,8 @@ timeout(excuteTime){
             //todo -Dfindbugs.includeFilterFile=./findbugsfilter.xml
             //设定 jdk version
             //toDO 获取sonar 信息
+            //sonar 5.6 must use jdk1.8
+             env.JAVA_HOME = tool "jdk1.8"
             try {
                 // withCredentials([usernameColonPassword(credentialsId: 'svn-winhong', variable: '')]) {
                 // some block
