@@ -64,6 +64,10 @@ timeout(excuteTime){
                 //    sh "'${mvnHome}/bin/mvn'  org.codehaus.mojo:findbugs-maven-plugin:3.0.4:findbugs  -Dfindbugs.xmlOutput=true "
                 //else
             } catch (exec) {
+                filename = env.BUILD_TAG + ".zip"
+                    //echo filename
+                zip archive: true, dir: 'target', glob: '', zipFile: filename
+
                 if (env.Findbugs_continueOnfail == "true") {
                     
                     echo "set stage status"
