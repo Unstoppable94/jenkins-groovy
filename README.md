@@ -22,6 +22,7 @@ Maven-2.1.0
 3.volums to out the master and wingrow data(NFS)
 
 4.docker registry update (supervisord.conf,wrapdocker,dockerupdate) 
+
 /etc/supervisord.conf 
 
 /usr/local/bin/dockerupdate.sh 
