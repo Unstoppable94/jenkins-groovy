@@ -23,5 +23,9 @@ Maven-2.1.0
 
 4.docker registry update (supervisord.conf,wrapdocker,dockerupdate) 
 /etc/supervisord.conf 
+
 /usr/local/bin/dockerupdate.sh 
+
 /usr/local/bin/wrapdocker
+
+
