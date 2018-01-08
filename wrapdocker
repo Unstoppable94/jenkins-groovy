@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -x 
+echo $DOCKER_DAEMON_ARGS >>/logs/wrapdocker.log
+# If a pidfile is still around (for example after a container restart),
+# delete it so that docker can start.
+#rm -rf /var/run/docker.pid
+#rm -rf /run/docker.pid
+
+pid=`cat /var/run/docker.pid`; echo $pid;kill $pid
+
+dockerd -H unix:///var/run/docker.sock $DOCKER_DAEMON_ARGS
