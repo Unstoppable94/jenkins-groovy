@@ -30,6 +30,6 @@ Maven-2.1.0
 /usr/local/bin/wrapdocker
 
 
-dockerindocker
+dockerindocker config
 
 docker run -it --rm -v /var/run/docker.sock:/var/run/docker.sock -v /usr/bin/docker:/usr/bin/docker busybox /bin/bash
